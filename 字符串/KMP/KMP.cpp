@@ -1,4 +1,5 @@
 // ans[i]代表匹配串和模式串以模式串的第i个字符(0 - index)为止的最长前缀
+// pmt[i]代表串S[0...i]最长的boarder的长度（boarder为某串的前缀同时为此串的后缀）
 vector<int> pmt, ans;
 
 void get_pmt(const string& str){
