@@ -21,11 +21,12 @@ public:
         return __gcd(f[pp][l], f[pp][r - (1 << pp) + 1]);
     }
 
+    // 其实可以不用clear
     void clear(){
         int t = __lg(n) + 1;
         for(int i = 1; i < t; i++) for(int j = 1; j < n; j++){
             if(j + (1 << i) > n) break;
-            f[i][j] = __gcd(f[i - 1][j], f[i - 1][j + (1 << (i - 1))]);
+            f[i][j] = 0;
         }
     }
 };
