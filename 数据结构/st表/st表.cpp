@@ -8,7 +8,7 @@ public:
         n = a.size();
         int t = __lg(n) + 1;
         for(int i = 0; i < n; i++) f[0][i] = a[i];
-        for(int i = 1; i < t; i++) for(int j = 1; j < n; j++){
+        for(int i = 1; i < t; i++) for(int j = 0; j < n; j++){
             if(j + (1 << i) > n) break;
             // 此处函数换为自己的
             f[i][j] = __gcd(f[i - 1][j], f[i - 1][j + (1 << (i - 1))]);
