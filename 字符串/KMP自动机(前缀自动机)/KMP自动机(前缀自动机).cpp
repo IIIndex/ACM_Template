@@ -1,3 +1,5 @@
+// O(|str| * M)初始化, O(|t|)计算str + t中, t部分的pmt函数
+// 因为对于pmt[i] <= str.length()的部分, KMP自动机可以直接O(1)转移
 namespace KMP_AUTOMATON{
     vector<int> pmt;
     // 字符集大小
