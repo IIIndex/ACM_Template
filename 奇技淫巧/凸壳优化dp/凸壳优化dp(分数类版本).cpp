@@ -8,7 +8,6 @@ namespace CHT{
     struct frac{
         T x, y;
         frac(T x, T y = 1): x(sgn(x ^ y) * abs(x)), y(abs(y)) {}
-        // 需要保证斜率不相等，否则需要特判
         bool operator<=(const frac& oth) const{
             return x * oth.y <= y * oth.x;
         }
@@ -21,6 +20,7 @@ namespace CHT{
         frac x;
         Line(T k, T b, frac x = NEGINF): k(k), b(b), x(x) {}
         T operator[](T x) const {return k * x + b;}
+        // 需要保证斜率不相等，否则需要特判
         frac insert(const Line& oth) {return {oth.b - b, k - oth.k};}
     };
 
