@@ -23,9 +23,9 @@ public:
             t[p].mu = 1;
         }
         if(t[p].ad){
-            add(t[lc].sum, 1ll * (len + 1) / 2 * t[p].ad);
+            add(t[lc].sum, (len + 1) / 2 * t[p].ad);
             add(t[lc].ad, t[p].ad);
-            add(t[rc].sum, 1ll * len / 2 * t[p].ad);
+            add(t[rc].sum, len / 2 * t[p].ad);
             add(t[rc].ad, t[p].ad);
             t[p].ad = 0;
         }
@@ -48,7 +48,7 @@ public:
                 t[p].ad *= m; t[p].ad %= mod;
             }
             if(a){
-                t[p].sum += 1ll * (cr - cl + 1) * a;
+                t[p].sum += (cr - cl + 1) * a; t[p].sum %= mod;
                 add(t[p].ad, a);
             }
             return;
@@ -63,4 +63,4 @@ public:
         int maxx = N << 2;
         for(int i = 0; i < maxx; i++) t[i].ad = t[i].sum = 0, t[i].mu = 1;
     }
-};
+}s;
