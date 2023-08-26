@@ -74,9 +74,7 @@ void query(Node &nd, int m, int rt, int dept){      //查询离nd点前m小的�
 
     if(~flag[lc]) query(nd, m, lc, dept + 1);       //lc != -1
 
-    if(pq.size() < m){                              //队列未满
-        fg = 1;
-    }
+    if (pq.size() < m) { pq.push(cur); fg = 1; }       //队列未满
     else{
         if(cur.first < pq.top().first){             //当前节点更优
             pq.pop();
