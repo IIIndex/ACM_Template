@@ -1,11 +1,17 @@
-// exgcd(a, b)能找到 ax + by = gcd(a, b)的一组特解
-pair<ll, ll> exgcd(ll a,ll b){
-    if(b == 0) return {1, 0};
-    auto [x, y] = exgcd(b, a % b);
-    ll tmp = x;
-    x = y;
-    y = tmp - a / b * y;
-    return {x, y};
-}
+// 用于找到 ax + by = gcd(a, b) 的一组解
+auto exgcd = [](auto&& self, ll a, ll b, ll& x, ll& y) -> void {
+    if (!b) {
+        // 此时 a = gcd(a, b)
+        x = 1, y = 0;
+        return;
+    }
 
-//记住最后得到的x需要进行x=(x%b+b)%b才是最小整数解
+    self(self, b, a % b, x, y);
+    // ax + by = gcd(a, b) = gcd(b, a % b) = bx_2 + (a % b)y_2
+    // = bx_2 + (a - b * floor(a / b))
+    // ax = ay_2, by = bx_2 - b * floor(a * b) * y_2
+    // x = y_2, y = x_2 - floor(a * b) * y_2
+    auto t = x;
+    x = y;
+    y = t - a / b * y;
+};
