@@ -1,36 +1,47 @@
-const int maxn=5e5+100;
+namespace LCA {
+    int n;
+    vector f(0, vector(0, 0)), e = f;
+    vector dep(0, 0), fa = dep;
 
-vector<int>e[maxn];                                             //存边（加边注意一般是无向图要加两次）
+    void dfs(int u, int f) {
+        fa[u] = f;
+        dep[u] = dep[f] + 1;
 
-int lg[maxn],depth[maxn];                                       //lg[i]预处理log2(i)+1的值，depth为节点深度
-
-int fa[maxn][20];                                               //fa[i][j]表示节点i的2^j祖先
-
-void init(int n){                                               //预处理log2(i)+1的值
-    for(int i=1;i<=n;i++)
-        lg[i]=lg[i-1]+(1<<lg[i-1]==i);
-}
-
-void dfs(int now,int f){                                        //now当前节点，f当前节点的父亲
-    fa[now][0]=f;depth[now]=depth[f]+1;                         //处理深度以及直接父亲
-    int len=e[now].size();
-    for(int i=1;i<=lg[depth[now]];i++){
-        fa[now][i]=fa[fa[now][i-1]][i-1];                       //两次上跳2^(i-1)就得到2^i
+        for (auto v: e[u]) {
+            if (v == f) continue;
+            dfs(v, u);
+        }
     }
-    for(int i=0;i<len;i++){
-        int v=e[now][i];
-        if(!depth[v])dfs(v,now);
-    }
-}
 
-int lca(int x,int y){
-    if(depth[x]>depth[y])swap(x,y);                             //保证y比x深
-    while(depth[x]<depth[y]){
-        y=fa[y][lg[depth[y]-depth[x]]-1];                       //保证x和y同一深度开始上跳
+    int lim = 0;
+    void init(int n, int rt, vector<vector<int>>& _e) {
+        e = move(_e);
+        lim = __lg(n) + 1;
+        f.assign(lim, vector(n + 1, 0));
+        dep = fa = vector(n + 1, 0);
+
+        dfs(rt, 0);
+
+        // 初始化倍增表
+        for (int i = 1; i <= n; i++) f[0][i] = fa[i];
+        for (int i = 1; i < lim; i++) for (int j = 1; j <= n; j++)
+            f[i][j] = f[i - 1][f[i - 1][j]];
     }
-    if(x==y)return x;
-    for(int k=lg[depth[x]]-1;k>=0;k--){
-        if(fa[x][k]!=fa[y][k]){x=fa[x][k];y=fa[y][k];}          //保证上跳到x和y的LCA的子节点（避免跳过）
+
+    int lca(int u, int v) {
+        if (dep[v] > dep[u]) swap(u, v);
+        
+        // u v 平齐
+        for (int i = lim - 1; i >= 0; i--) if (dep[u] - (1 << i) >= dep[v])
+            u = f[i][u];
+        
+        if (u == v) return u;
+
+        // 跳到LCA下方第一个位置
+        for (int i = lim - 1; i >= 0; i--) if (f[i][u] != f[i][v]) {
+            u = f[i][u]; v = f[i][v];
+        }
+
+        return f[0][u];
     }
-    return fa[y][0];                                            //即为所求
 }
